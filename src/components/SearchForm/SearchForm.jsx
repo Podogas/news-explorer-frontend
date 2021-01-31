@@ -2,8 +2,9 @@ import './SearchForm.css';
 
 function SearchForm() {
   return (
-    <from className="search-form">
-      <p>SearchForm</p>
+    <form className="main__search-form">
+        <input type="text" className="search-form__input" placeholder="Введите тему новости"></input>
+        <button className="search-form__btn">Искать</button>
     </form>
   );
 }

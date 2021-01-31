@@ -1,10 +1,48 @@
 import './Navigation.css';
+import React, { useState } from "react";
+import { Link, useLocation } from 'react-router-dom';
+import logOutIcon from '../../images/logout.svg';
+import whiteLogOutIcon from '../../images/logout-white.svg';
 
-function Navigation() {
+function Navigation({loggedIn, authButtonClick, name, mobileMenu} ) {
+  const currentPath = useLocation().pathname;
+  
   return (
-    <nav className="navigation">
-      <p>Navigation</p>
-    </nav>
+      <nav className={ mobileMenu ? 'header__navbar header__navbar_mobile-visible' :'header__navbar'}>
+        <Link
+          to='/'
+          className={
+            currentPath === '/'
+              ? 'header__link header__link_selected'
+              : 'header__link'
+          }
+        >
+          Главная
+        </Link>
+        {loggedIn ? (
+          <Link
+            to='/saved-news'
+            className={
+              currentPath === '/saved-news'
+                ? 'header__link header__link_selected'
+                : 'header__link'
+            }
+          >
+            Сохранённые статьи
+          </Link>
+        ) : null}
+         {/*использую именно линк, что бы сразу редиректило на '/' еще до useEffect в app.js*/}
+        <Link to='/' className='header__link header__auth-button' onClick={authButtonClick}>
+          { loggedIn ? 
+            (<>
+          {/*auth-button это служебный блок */}
+              <p className='auth-button__name'>{name}</p>
+              <img src={whiteLogOutIcon} alt="выход" className={currentPath === '/' ? 'auth-button__icon' : mobileMenu ? 'auth-button__icon' : 'auth-button__icon_hidden'} />
+              <img src={logOutIcon} alt="выход" className={currentPath === '/' ? 'auth-button__icon_hidden' : mobileMenu ? 'auth-button__icon_hidden' : 'auth-button__icon'} />
+            </>) 
+            : 'Авторизоваться'}
+        </Link>
+      </nav>
   );
 }
 

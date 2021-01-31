@@ -1,9 +1,23 @@
 import './Footer.css';
+import { Link } from 'react-router-dom';
+import ghIcon from '../../images/github.svg';
+import fbIcon from '../../images/fb.svg';
 
 function Footer() {
   return (
     <footer className="footer">
-      <p>NewsCard</p>
+      <p className="footer__about">© 2020 Supersite, Powered by News API</p>
+      <nav className="footer__navbar">
+        <Link to='/' className="footer__link footer__link-main">Главная</Link>
+        <a href="https://praktikum.yandex.ru/" target="_blank" className="footer__link footer__link-practicum">Яндекс.Практикум</a>
+        <a href="https://github.com/podogas" target="_blank" className="footer__link footer__link-gh" >
+          <img src={ghIcon} alt="git" className="footer__link-gh-icon"></img>
+        </a>
+        <a href="https://www.facebook.com/" target="_blank" className="footer__link footer__link-fb">
+          <div className="footer__link-fb-icon"></div>
+        </a>
+      </nav>
+      
     </footer>
   );
 }
