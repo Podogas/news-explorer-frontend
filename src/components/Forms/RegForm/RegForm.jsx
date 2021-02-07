@@ -56,7 +56,6 @@ function RegForm({ onSubmit }) {
       noValidate
       className="reg-form"
       method="post"
-      action=""
       onSubmit={submit}
     >
       <span className="reg-form__input-caption">Email</span>

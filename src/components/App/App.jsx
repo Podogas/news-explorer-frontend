@@ -15,7 +15,7 @@ import NoResult from "../NoResult/NoResult.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({name: 'НеЗареган'});
   const [isPopupOpened, setIsPopupOpened] = useState(false);
   const [testSavedCardsArray, setTestSavedCardsArray] =useState(null);
   const [cardsArray, setCardsArray] = useState(null);

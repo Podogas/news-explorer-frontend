@@ -4,6 +4,7 @@
   width: 100%;
   border-radius: 15px;
   max-height: 576px;
+  list-style: none;
 }
 .news-card__image {
   height: 100%;

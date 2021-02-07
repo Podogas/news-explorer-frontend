@@ -11,7 +11,7 @@ function Header({ loggedIn, authButtonClick, name, isPopupOpened }) {
   }
   return (
     <>
-      <header
+     <header
         className={
           currentPath === "/"
             ? mobileMenu
@@ -38,6 +38,7 @@ function Header({ loggedIn, authButtonClick, name, isPopupOpened }) {
           }
           onClick={toggleMobileMenu}
         />
+        
         <Navigation
           loggedIn={loggedIn}
           authButtonClick={authButtonClick}

@@ -39,7 +39,7 @@ function AuthForm({ onSubmit }) {
       noValidate
       className="auth-form"
       method="post"
-      action=""
+      
       onSubmit={submit}
     >
       <span className="auth-form__input-caption">Email</span>

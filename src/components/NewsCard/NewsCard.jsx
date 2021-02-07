@@ -39,7 +39,8 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
     return;
   }
   return (
-    <article className="news-card">
+
+    <li className="news-card">
       <img
         src={card.imageSrc}
         alt={card.imageAlt}
@@ -76,7 +77,7 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
         <p className={calcLines().text}>{card.text}</p>
       </div>
       <span className="news-card__caption">{card.source}</span>
-    </article>
+    </li>
   );
 }
 

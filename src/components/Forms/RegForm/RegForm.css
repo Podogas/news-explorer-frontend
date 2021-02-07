@@ -3,7 +3,7 @@
 }
 .reg-form__input-caption {
   display: block;
-  font-family: "Inter" sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.2;
@@ -16,7 +16,7 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding: 0;
   width: 100%;
-  font-family: "Inter" sans-serif;
+  font-family: "Inter" , sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.2;
@@ -25,14 +25,13 @@
 .reg-form__input-item::placeholder {
   opacity: 0.2;
 }
-.reg-form__input-item::focus {
-}
+
 .reg-form__input-error-message {
   min-height: 12px;
   display: block;
   margin-top: 3px;
   margin-bottom: 13px;
-  font-family: Inter;
+  font-family: Inter , sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.2;
@@ -66,8 +65,6 @@
   .reg-form__input-item {
   }
   .reg-form__input-item::placeholder {
-  }
-  .reg-form__input-item::focus {
   }
   .reg-form__input-error-message {
   }
