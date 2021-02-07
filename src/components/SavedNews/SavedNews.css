@@ -1,0 +1,25 @@
+.saved-news {
+  background-color: #f5f6f7;
+  padding-left: 102px;
+  padding-right: 102px;
+}
+
+/*tablet s*/
+
+@media screen and (max-width: 900px) {
+  .saved-news {
+    padding: 32px h40px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .saved-news {
+    padding: 0 50px;
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .saved-news {
+    padding: 24px 16px;
+  }
+}

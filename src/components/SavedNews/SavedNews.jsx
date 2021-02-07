@@ -1,9 +1,29 @@
-import './SavedNews.css';
+import "./SavedNews.css";
+import NewsCards from "../NewsCards/NewsCards.jsx";
 
-function SavedNews() {
+function SavedNews({
+  cardsArray,
+  loggedIn,
+  authButtonClick,
+  handleSaveClick,
+  handleDeleteClick,
+}) {
+  const test = cardsArray.map((card) => {
+    if (card.saved) {
+      return card;
+    }
+    return;
+  });
+
   return (
     <main className="saved-news">
-      <p>SavedNews</p>
+      <NewsCards
+        cardsToShow={test}
+        loggedIn={loggedIn}
+        authButtonClick={authButtonClick}
+        handleSaveClick={handleSaveClick}
+        handleDeleteClick={handleDeleteClick}
+      ></NewsCards>
     </main>
   );
 }
