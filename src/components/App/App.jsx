@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Route, Switch, Redirect, useHistory } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Header from "../Header/Header.jsx";
 import Main from "../Main/Main.jsx";
 import About from "../About/About.jsx";
@@ -14,12 +14,16 @@ import testCardsArray from "../../utils/cardsArray.js";
 import NoResult from "../NoResult/NoResult.jsx";
 
 function App() {
+
+
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({name: 'НеЗареган'});
   const [isPopupOpened, setIsPopupOpened] = useState(false);
   const [testSavedCardsArray, setTestSavedCardsArray] =useState(null);
   const [cardsArray, setCardsArray] = useState(null);
   const [preloader, setPreloader] = useState(false);
+
+console.log(loggedIn)
   function handleDeleteClick() {
     console.log("delete");
   }

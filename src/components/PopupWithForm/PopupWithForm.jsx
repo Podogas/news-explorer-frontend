@@ -1,5 +1,5 @@
 import "./PopupWithForm.css";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import AuthForm from "../Forms/AuthForm/AuthForm.jsx";
 import RegForm from "../Forms/RegForm/RegForm.jsx";
 

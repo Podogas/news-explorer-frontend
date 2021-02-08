@@ -1,6 +1,5 @@
 import "./RegForm.css";
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 
 function RegForm({ onSubmit }) {
   const emailRef = React.useRef();

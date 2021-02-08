@@ -8,12 +8,18 @@ function SavedNews({
   handleSaveClick,
   handleDeleteClick,
 }) {
-  const test = cardsArray.map((card) => {
+function test(){
+  if(cardsArray) {
+     cardsArray.map((card) => {
     if (card.saved) {
       return card;
     }
-    return;
+    return '';
   });
+     return [];
+  }
+  return [];
+}  
 
   return (
     <main className="saved-news">

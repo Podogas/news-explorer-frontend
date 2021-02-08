@@ -1,7 +1,6 @@
 import "./Footer.css";
 import { Link } from "react-router-dom";
 import ghIcon from "../../images/github.svg";
-import fbIcon from "../../images/fb.svg";
 
 function Footer() {
   return (
@@ -14,6 +13,7 @@ function Footer() {
         <a
           href="https://praktikum.yandex.ru/"
           target="_blank"
+          rel="noreferrer"
           className="footer__link footer__link-practicum"
         >
           Яндекс.Практикум
@@ -21,6 +21,7 @@ function Footer() {
         <a
           href="https://github.com/podogas"
           target="_blank"
+          rel="noreferrer"
           className="footer__link footer__link-gh"
         >
           <img src={ghIcon} alt="git" className="footer__link-gh-icon"></img>
@@ -28,6 +29,7 @@ function Footer() {
         <a
           href="https://www.facebook.com/"
           target="_blank"
+          rel="noreferrer"
           className="footer__link footer__link-fb"
         >
           <div className="footer__link-fb-icon"></div>

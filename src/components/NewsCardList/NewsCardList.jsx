@@ -1,7 +1,6 @@
 import "./NewsCardList.css";
 import React, { useState } from "react";
 import NewsCards from "../NewsCards/NewsCards.jsx";
-import NewsCard from "../NewsCard/NewsCard.jsx";
 
 function NewsCardList({
   loggedIn,

@@ -8,7 +8,7 @@ function NewsCards({
   handleDeleteClick,
   cardsToShow,
 }) {
-  const listItems = cardsToShow.map((card, id) => {
+  const listItems = cardsToShow().map((card, id) => {
     if (card) {
       return (
         <NewsCard
@@ -21,7 +21,7 @@ function NewsCards({
         ></NewsCard>
       );
     }
-    return;
+    return [];
   });
 
   return <ul className="news-cards">{listItems}</ul>;

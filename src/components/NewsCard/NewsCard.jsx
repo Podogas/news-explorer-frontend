@@ -1,5 +1,5 @@
 import "./NewsCard.css";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
   const currentPath = useLocation().pathname;
@@ -36,7 +36,6 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
         text: "text-content__text",
       };
     }
-    return;
   }
   return (
 
