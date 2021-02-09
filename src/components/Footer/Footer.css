@@ -1,0 +1,115 @@
+.footer {
+  min-height: 80px;
+  display: flex;
+  padding: 0 104px 27px 104px;
+  justify-content: space-between;
+  align-items: flex-end;
+  box-sizing: border-box;
+}
+.footer__about {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #b6bcbf;
+}
+.footer__navbar {
+  display: flex;
+}
+.footer__link {
+  font-size: 18px;
+  line-height: 1.4;
+  color: #1a1b22;
+}
+.footer__link-main {
+  margin-right: 38px;
+}
+.footer__link-practicum {
+  margin-right: 56px;
+}
+.footer__link-gh {
+  width: 24px;
+  height: 24px;
+  margin-right: 24px;
+}
+.footer__link-fb {
+  width: 24px;
+  height: 24px;
+}
+.footer__link-fb-icon {
+  min-width: 100%;
+  min-height: 100%;
+  background-image: url("../../images/fb.svg");
+  background-size: cover;
+}
+@media screen and (max-width: 900px) {
+  .footer {
+    max-height: 64px;
+    padding: 20px 40px;
+  }
+  .footer__link-main {
+    margin-right: 17px;
+  }
+  .footer__link-practicum {
+    margin-right: 33px;
+  }
+  .footer__link-fb {
+    max-width: 22px;
+    max-height: 22px;
+  }
+  .footer__link-fb-icon {
+    background-image: url("../../images/fb-round.svg");
+  }
+}
+@media screen and (max-width: 715px) {
+  .footer {
+    padding: 20px;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  .footer__about {
+    font-size: 16px;
+  }
+  .footer__navbar {
+    flex-wrap: wrap;
+  }
+
+  .footer__link-main {
+    margin-bottom: 22px;
+  }
+
+  .footer__link-fb-icon {
+    background-image: url("../../images/fb.svg");
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .footer {
+    padding: 10px 16px;
+    min-height: 176px;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+  }
+  .footer__about {
+    font-size: 16px;
+  }
+  .footer__navbar {
+    flex-wrap: wrap;
+  }
+  .footer__link-main {
+    min-width: 150px;
+    margin-bottom: 22px;
+  }
+  .footer__link-practicum {
+    order: 4;
+  }
+  .footer__link-gh {
+    margin-left: auto;
+    order: 1;
+  }
+  .footer__link-fb {
+    order: 3;
+  }
+  .footer__link-fb-icon {
+    background-image: url("../../images/fb.svg");
+  }
+}

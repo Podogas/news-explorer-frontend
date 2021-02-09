@@ -1,0 +1,88 @@
+.main {
+  background-image: url('../../images/main-no-login-1440-bgi.png');
+  background-repeat: no-repeat;
+  color: #FFFFFF;
+  padding-top: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 576px;
+  box-sizing: border-box;
+}
+
+.main__title {
+  font-family: 'RobotoSlab', 'Roboto', sans-serif;
+  font-size: 60px;
+  line-height: 1.1;
+  font-weight: 100;
+  max-width: 608px;
+  margin-bottom: 30px;
+}
+
+.main__subtitle {
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 400;
+  max-width: 545px;
+  margin: 0 63px 60px 0;
+} 
+
+
+
+
+
+
+/*tablet*/
+
+ @media screen and (max-width: 900px) {
+  .main  {
+    padding-top: 104px;
+    min-height: 400px;
+  }
+  .main__title {
+  font-size: 36px;
+  line-height: 1.1;
+  max-width: 385px;
+  margin:0 55px 16px 0;
+  }
+  .main__subtitle {
+  max-width: 452px;
+  margin: 0 0 48px 0;
+  } 
+ 
+}
+ @media screen and (max-width: 768px) {
+  .main  {
+    background-image: url('../../images/main-no-login-768-bgi.png');
+ }
+ 
+}
+
+ /*mobile L*/
+
+ @media screen and (max-width: 484px) {
+  .main  {
+    padding: 88px 16px 0 16px;
+  }
+  .main__title {
+  max-width: 285px;
+  margin-right: 0;
+  }
+  .main__subtitle {
+  max-width: 288px;
+  
+  } 
+ } 
+
+ /*mobile S*/
+
+ @media screen and (max-width: 320px) {
+  .main  {
+    background-image: url('../../images/main-no-login-320-bgi.png');
+    min-height: 536px;
+  }
+  .main__subtitle {
+  max-width: 288px;
+  margin: 0 0 118px 0;
+  } 
+}

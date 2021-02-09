@@ -1,0 +1,8 @@
+.app {
+  position: relative;
+  font-family: "Roboto", "RobotoSlab", sans-serif;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 320px;
+}
