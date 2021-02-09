@@ -19,11 +19,18 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({name: 'НеЗареган'});
   const [isPopupOpened, setIsPopupOpened] = useState(false);
-  const [testSavedCardsArray, setTestSavedCardsArray] =useState(null);
+  const [testSavedCardsArray, setTestSavedCardsArray] =useState(testCardsArray);
   const [cardsArray, setCardsArray] = useState(null);
   const [preloader, setPreloader] = useState(false);
 
-console.log(loggedIn)
+
+function random() {
+  const randomNum = Math.random();
+  if(randomNum > 0.3){
+    return testCardsArray;
+  }
+  return [];
+}
   function handleDeleteClick() {
     console.log("delete");
   }
@@ -36,7 +43,7 @@ console.log(loggedIn)
   }
   function onGettingResults() {
     console.log("RESULT!!!");
-    setCardsArray(testCardsArray);
+    setCardsArray(random());
     setPreloader(false);
   }
 

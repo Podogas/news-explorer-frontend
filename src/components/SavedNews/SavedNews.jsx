@@ -9,22 +9,18 @@ function SavedNews({
   handleDeleteClick,
 }) {
 function test(){
-  if(cardsArray) {
-     cardsArray.map((card) => {
+  let t = cardsArray.map((card) => {
     if (card.saved) {
       return card;
     }
     return '';
-  });
-     return [];
-  }
-  return [];
-}  
-
+  })
+  return t;
+}
   return (
     <main className="saved-news">
       <NewsCards
-        cardsToShow={test}
+        cardsToShow={test()}
         loggedIn={loggedIn}
         authButtonClick={authButtonClick}
         handleSaveClick={handleSaveClick}

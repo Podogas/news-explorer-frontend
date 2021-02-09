@@ -67,7 +67,9 @@
   background: none;
   color: #347eff;
 }
-
+.popup-with-form__goto-btn:focus { 
+  outline: 1px solid #347eff ;
+}
 @media screen and (max-width: 600px) {
   .popup-with-form__cross-btn {
     top: -40px;

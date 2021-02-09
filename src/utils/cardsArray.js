@@ -925,14 +925,7 @@ let cardsArray = [
     saved: undefined,
   }
 ];
-function random() {
-  const randomNum = Math.random();
-  if(randomNum > 0.3){
-    return cardsArray;
-  }
-  return [];
-  
-}
 
-export default random;
+
+export default cardsArray;
 //
