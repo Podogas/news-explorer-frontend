@@ -4,6 +4,11 @@ import { useLocation } from "react-router-dom";
 function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
   const currentPath = useLocation().pathname;
 
+
+    
+
+
+
   function calcLines() {
     if (card.title.length <= 25) {
       return {
@@ -18,7 +23,7 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
     } else if (card.title.length <= 75) {
       return {
         title: "news-card__line-clamp_3 text-content__title",
-        text: "text-content__text news-card__line-clamp_4",
+        text: "text-content__text news-card__line-clamp_3",
       };
     } else if (card.title.length <= 100) {
       return {
@@ -41,20 +46,20 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
 
     <li className="news-card">
       <img
-        src={card.imageSrc}
-        alt={card.imageAlt}
+        src={card.urlToImage}
+        alt={card.title}
         className="news-card__image"
       ></img>
       {currentPath === "/" ? null : (
-        <span className="news-card__keyword">{card.keyword}</span>
+        <span className="news-card__keyword">{card.keyWord}</span>
       )}
       <button
         className={
           currentPath === "/"
             ? loggedIn
-              ? card.saved
+              ? {/*card.saved
                 ? "news-card__btn_bookmark-saved"
-                : "news-card__btn_bookmark"
+                : "news-card__btn_bookmark"*/}
               : "news-card__btn_bookmark"
             : "news-card__btn_delete"
         }
@@ -63,19 +68,22 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
       <span className="news-card__btn-tooltip">
         {currentPath === "/"
           ? loggedIn
-            ? card.saved
+            ? card.saved 
               ? "Убрать из сохранённых"
               : "Сохранить статью"
             : "Войдите, чтобы сохранять статьи"
           : "Убрать из сохранённых"}
       </span>
 
-      <span className="news-card__date">{card.date}</span>
+      <span className="news-card__date">{card.publishedAt}</span>
       <div className="news-card__text-content">
-        <h2 className={calcLines().title}>{card.title}</h2>
-        <p className={calcLines().text}>{card.text}</p>
+        <a className="news-card__link" href={card.url}>
+          <h2 className={calcLines().title}>{card.title}</h2>
+        </a>
+        
+        <p className={calcLines().text}>{card.description}</p>
       </div>
-      <span className="news-card__caption">{card.source}</span>
+      <span className="news-card__caption">{card.source.name}</span>
     </li>
   );
 }

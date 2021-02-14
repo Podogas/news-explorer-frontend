@@ -12,25 +12,53 @@ import PopupWithForm from "../PopupWithForm/PopupWithForm.jsx";
 import Preloader from "../Preloader/Preloader.jsx";
 import testCardsArray from "../../utils/cardsArray.js";
 import NoResult from "../NoResult/NoResult.jsx";
+import SearchError from "../SearchError/SearchError.jsx";
+import { validateSearchForm } from "../../utils/Validation.js";
+import NewsApi from "../../utils/NewsApi.js";
+/*
+https://newsapi.org/v2/everything?language=ru&from2021-02-07&to=2021-02-13&q=навальный суд&pageSize=100&apiKey=0992a0189e744342bf057f7e1714b37c
+*/
 
+/*
+newsapikey= '0992a0189e744342bf057f7e1714b37c'
+*/
 function App() {
-
-
   const [loggedIn, setLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState({name: 'НеЗареган'});
+  const [currentUser, setCurrentUser] = useState({ name: "НеЗареган" });
   const [isPopupOpened, setIsPopupOpened] = useState(false);
-  const [testSavedCardsArray, setTestSavedCardsArray] =useState(testCardsArray);
+  const [testSavedCardsArray, setTestSavedCardsArray] = useState(
+    testCardsArray
+  );
   const [cardsArray, setCardsArray] = useState(null);
   const [preloader, setPreloader] = useState(false);
+  const [searchError, setSearchError] = useState({
+    state: false,
+    content: {
+      heading: "Во время запроса произошла ошибка",
+      description:
+        "Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
+    },
+  });
 
+  React.useEffect(() => {
+    console.log("effect");
+    const lastQueryResults = localStorage.getItem("lastQueryResults");
+    if (lastQueryResults) {
+      console.log("got localStorageCards");
+      setCardsArray(JSON.parse(lastQueryResults));
+      setSearchError({ state: false });
+    }
+  }, []);
 
-function random() {
-  const randomNum = Math.random();
-  if(randomNum > 0.3){
-    return testCardsArray;
-  }
-  return [];
-}
+  /*
+
+  function random() {
+    const randomNum = Math.random();
+    if (randomNum > 0.3) {
+      return testCardsArray;
+    }
+    return [];
+  }*/
   function handleDeleteClick() {
     console.log("delete");
   }
@@ -41,22 +69,57 @@ function random() {
     setIsPopupOpened(true);
     console.log("loginPopUP");
   }
-  function onGettingResults() {
+
+  function onGettingResults(data) {
     console.log("RESULT!!!");
-    setCardsArray(random());
+    console.log(data);
+    localStorage.setItem("lastQueryResults", JSON.stringify(data.articles));
+    setCardsArray(data.articles);
+    setSearchError({ state: false });
     setPreloader(false);
+  }
+  function onError(err, content) {
+    setPreloader(false);
+    setCardsArray([]);
+    setSearchError({
+      state: true,
+      content: {
+        heading: content.heading,
+        description: content.description,
+      },
+    });
+    console.error(err.message);
   }
 
   function onFindClick(e) {
     e.preventDefault();
-    setPreloader(true);
-    setTimeout(onGettingResults, 2000);
+    validateSearchForm(e.target.querySelector(".search-form__input").value)
+      .then((query) => {
+        setPreloader(true);
+        NewsApi.findNews(query)
+          .then((res) => {
+            onGettingResults(res);
+          })
+          .catch((err) => {
+            onError(err, {
+              heading: "Во время запроса произошла ошибка",
+              description:
+                "Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
+            });
+          });
+      })
+      .catch((err) => {
+        onError(err, {
+          heading: "Нужно ввести ключевое слово",
+          description: "Кажется вы ничего не ввели",
+        });
+      });
 
     console.log("find");
   }
 
   function handleLogin(email, password) {
-    setTestSavedCardsArray(testCardsArray)
+    setTestSavedCardsArray(testCardsArray);
     setLoggedIn(true);
     handleClosePopup();
     console.log("login!");
@@ -69,7 +132,9 @@ function random() {
   }
   function handleRegister(email, password, name, onSucsess) {
     setCurrentUser({ name: name });
-    /*onSucsess(); вызываем когда пришел ответ 200*/
+    /*onSucsess(); вызываем когда пришел ответ 200
+    https://newsapi.org/v2/everything?q=навальный&apiKey=0992a0189e744342bf057f7e1714b37c
+    */
     onSucsess();
     console.log("reg");
   }
@@ -114,6 +179,8 @@ function random() {
             )
           ) : preloader ? (
             <Preloader></Preloader>
+          ) : searchError.state ? (
+            <SearchError content={searchError.content}></SearchError>
           ) : cardsArray && cardsArray.length === 0 ? (
             <NoResult></NoResult>
           ) : null}
