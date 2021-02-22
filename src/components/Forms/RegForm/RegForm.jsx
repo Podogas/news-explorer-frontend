@@ -9,6 +9,7 @@ function RegForm({ onSubmit }) {
   const [errorMessageEmail, setErrorMessageEmail] = React.useState("");
   const [errorMessagePass, setErrorMessagePass] = React.useState("");
   const [errorMessageName, setErrorMessageName] = React.useState("");
+  const [errorMessageBtn, setErrorMessageBtn] = React.useState("");
   function handleValidation() {
     if (!emailRef.current.validity.valid) {
       setValidity(false);
@@ -40,23 +41,22 @@ function RegForm({ onSubmit }) {
       setValidity(true);
     }
   }
+  function onError(err) {
+    setErrorMessageBtn(`${err.message}`);
+  }
   function submit(e) {
     e.preventDefault();
     if (validity) {
       onSubmit(
         emailRef.current.value,
         passRef.current.value,
-        nameRef.current.value
+        nameRef.current.value,
+        onError
       );
     }
   }
   return (
-    <form
-      noValidate
-      className="reg-form"
-      method="post"
-      onSubmit={submit}
-    >
+    <form noValidate className="reg-form" method="post" onSubmit={submit}>
       <span className="reg-form__input-caption">Email</span>
       <input
         ref={emailRef}
@@ -92,6 +92,7 @@ function RegForm({ onSubmit }) {
         minLength="2"
       />
       <span className="reg-form__input-error-message">{errorMessageName}</span>
+      <span className="reg-form__btn-error-message">{errorMessageBtn}</span>
 
       <button
         onClick={submit}

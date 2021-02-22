@@ -3,14 +3,15 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import logOutIcon from "../../images/logout.svg";
 import whiteLogOutIcon from "../../images/logout-white.svg";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function Navigation({
   loggedIn,
   authButtonClick,
-  name,
   mobileMenu,
   toggleMobileMenu,
 }) {
+  const userContext = React.useContext(CurrentUserContext);
   const currentPath = useLocation().pathname;
   function authButtonClickHandler() {
     authButtonClick();
@@ -31,7 +32,7 @@ function Navigation({
             ? "header__link header__link_selected"
             : "header__link"
         }
-        onClick={toggleMobileMenu}
+        onClick={mobileMenu ? toggleMobileMenu : null}
       >
         Главная
       </Link>
@@ -43,12 +44,12 @@ function Navigation({
               ? "header__link header__link_selected"
               : "header__link"
           }
-          onClick={toggleMobileMenu}
+          onClick={mobileMenu ? toggleMobileMenu : null}
         >
           Сохранённые статьи
         </Link>
       ) : null}
-      {/*использую именно линк, что бы сразу редиректило на '/' еще до useEffect в app.js*/}
+
       <Link
         to="/"
         className="header__link header__auth-button"
@@ -57,7 +58,7 @@ function Navigation({
         {loggedIn ? (
           <>
             {/*auth-button это служебный блок */}
-            <p className="auth-button__name">{name}</p>
+            <p className="auth-button__name">{userContext.name}</p>
             <img
               src={whiteLogOutIcon}
               alt="выход"

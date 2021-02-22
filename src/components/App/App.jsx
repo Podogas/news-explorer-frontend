@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import Header from "../Header/Header.jsx";
 import Main from "../Main/Main.jsx";
 import About from "../About/About.jsx";
@@ -10,27 +12,23 @@ import SavedNewsHeader from "../SavedNewsHeader/SavedNewsHeader.jsx";
 import SavedNews from "../SavedNews/SavedNews.jsx";
 import PopupWithForm from "../PopupWithForm/PopupWithForm.jsx";
 import Preloader from "../Preloader/Preloader.jsx";
-import testCardsArray from "../../utils/cardsArray.js";
 import NoResult from "../NoResult/NoResult.jsx";
 import SearchError from "../SearchError/SearchError.jsx";
 import { validateSearchForm } from "../../utils/Validation.js";
 import NewsApi from "../../utils/NewsApi.js";
-/*
-https://newsapi.org/v2/everything?language=ru&from2021-02-07&to=2021-02-13&q=навальный суд&pageSize=100&apiKey=0992a0189e744342bf057f7e1714b37c
-*/
+import MainApi from "../../utils/MainApi.js";
 
-/*
-newsapikey= '0992a0189e744342bf057f7e1714b37c'
-*/
 function App() {
+  const [readyToRender, setReadyToRender] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ name: "НеЗареган" });
+  const [currentUser, setCurrentUser] = useState({
+    name: "",
+    savedCardsArray: [],
+  });
   const [isPopupOpened, setIsPopupOpened] = useState(false);
-  const [testSavedCardsArray, setTestSavedCardsArray] = useState(
-    testCardsArray
-  );
   const [cardsArray, setCardsArray] = useState(null);
   const [preloader, setPreloader] = useState(false);
+  const [updateStyles, setUpdateStyles] = useState("");
   const [searchError, setSearchError] = useState({
     state: false,
     content: {
@@ -41,41 +39,108 @@ function App() {
   });
 
   React.useEffect(() => {
-    console.log("effect");
+    const userSettings = {};
     const lastQueryResults = localStorage.getItem("lastQueryResults");
-    if (lastQueryResults) {
-      console.log("got localStorageCards");
-      setCardsArray(JSON.parse(lastQueryResults));
+    const lastQueryResultsArray = JSON.parse(lastQueryResults);
+    if (lastQueryResults && loggedIn) {
+      compareWithSaved(lastQueryResultsArray);
       setSearchError({ state: false });
+    } else if (lastQueryResultsArray) {
+      setCardsArray(lastQueryResultsArray);
+    } else {
+      setCardsArray(null);
     }
-  }, []);
-
-  /*
-
-  function random() {
-    const randomNum = Math.random();
-    if (randomNum > 0.3) {
-      return testCardsArray;
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      MainApi.getUserData(jwt)
+        .then((res) => {
+          userSettings.name = res.name;
+        })
+        .catch((err) => console.log(err));
+      MainApi.getSavedArticles(jwt)
+        .then((res) => {
+          userSettings.savedCardsArray = res;
+        })
+        .then(() => {
+          setCurrentUser(userSettings);
+          setLoggedIn(true);
+          setReadyToRender(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setReadyToRender(true);
     }
-    return [];
-  }*/
-  function handleDeleteClick() {
-    console.log("delete");
+  }, [loggedIn, updateStyles]);
+
+  function handleDeleteClick(card) {
+    const jwt = localStorage.getItem("jwt");
+    MainApi.deleteArticle(jwt, card._id)
+      .then((res) => {
+        const newarray = currentUser.savedCardsArray.filter((item) => {
+          return item._id !== card._id;
+        });
+
+        setCurrentUser({ name: currentUser.name, savedCardsArray: newarray });
+        compareWithDeleted(card._id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-  function handleSaveClick() {
-    console.log("saved");
+  function compareWithDeleted(idOfDeleted) {
+    currentUser.savedCardsArray.map((card) => {
+      cardsArray.map((article) => {
+        if (card.link === article.url) {
+          if (idOfDeleted === article._id) {
+            article.saved = false;
+          }
+          return;
+        }
+      });
+    });
+    setCardsArray(cardsArray);
+    setReadyToRender(false);
+    setReadyToRender(true);
+  }
+
+  function handleSaveClick(card) {
+    const jwt = localStorage.getItem("jwt");
+    card.saved = true;
+    MainApi.postArticle(jwt, card)
+      .then((res) => {
+        res.saved = true;
+        currentUser.savedCardsArray.push(res);
+        setUpdateStyles("1");
+        setUpdateStyles("2");
+        compareWithSaved(cardsArray);
+      })
+      .catch((err) => console.error(err));
   }
   function onLoginClick() {
     setIsPopupOpened(true);
-    console.log("loginPopUP");
   }
-
+  function compareWithSaved(articles) {
+    currentUser.savedCardsArray.map((card) => {
+      articles.map((article) => {
+        if (card.link === article.url) {
+          article._id = card._id;
+          article.saved = true;
+        }
+      });
+    });
+    setCardsArray(articles);
+  }
   function onGettingResults(data) {
-    console.log("RESULT!!!");
-    console.log(data);
     localStorage.setItem("lastQueryResults", JSON.stringify(data.articles));
-    setCardsArray(data.articles);
-    setSearchError({ state: false });
+    localStorage.setItem("lastQuery", JSON.stringify(data.query));
+    if (loggedIn) {
+      compareWithSaved(data.articles);
+      setSearchError({ state: false });
+    } else {
+      setCardsArray(data.articles);
+    }
     setPreloader(false);
   }
   function onError(err, content) {
@@ -98,6 +163,7 @@ function App() {
         setPreloader(true);
         NewsApi.findNews(query)
           .then((res) => {
+            res.query = query;
             onGettingResults(res);
           })
           .catch((err) => {
@@ -114,95 +180,121 @@ function App() {
           description: "Кажется вы ничего не ввели",
         });
       });
-
-    console.log("find");
   }
 
-  function handleLogin(email, password) {
-    setTestSavedCardsArray(testCardsArray);
-    setLoggedIn(true);
-    handleClosePopup();
-    console.log("login!");
+  function handleLogin(email, password, onError) {
+    MainApi.signIn(email, password)
+      .then((res) => {
+        setCardsArray(null);
+        localStorage.removeItem("lastQuery");
+        localStorage.removeItem("lastQueryResults");
+
+        setLoggedIn(true);
+        handleClosePopup();
+      })
+      .catch((err) => {
+        onError(err);
+      });
   }
   function handleLogOut() {
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("lastQuery");
+    localStorage.removeItem("lastQueryResults");
     setIsPopupOpened(false);
     setCurrentUser({});
     setLoggedIn(false);
-    console.log("logOUT");
   }
-  function handleRegister(email, password, name, onSucsess) {
-    setCurrentUser({ name: name });
-    /*onSucsess(); вызываем когда пришел ответ 200
-    https://newsapi.org/v2/everything?q=навальный&apiKey=0992a0189e744342bf057f7e1714b37c
-    */
-    onSucsess();
-    console.log("reg");
+  function handleRegister(email, password, name, onSucsess, onError) {
+    MainApi.signUp(email, password, name)
+      .then((res) => {
+        onSucsess();
+      })
+      .catch((err) => {
+        onError(err);
+      });
   }
   function handleClosePopup() {
     setIsPopupOpened(false);
-    console.log("closePOpup");
   }
   function handleAuthClick() {
     return loggedIn ? handleLogOut() : onLoginClick();
   }
 
-  return (
-    <div className="app">
-      <Header
-        loggedIn={loggedIn}
-        authButtonClick={handleAuthClick}
-        name={currentUser.name}
-        isPopupOpened={isPopupOpened}
-      />
-      <Switch>
-        <Route exact path="/">
-          {isPopupOpened ? (
-            <PopupWithForm
-              handleClosePopup={handleClosePopup}
-              handleLogin={handleLogin}
-              handleRegister={handleRegister}
-            ></PopupWithForm>
-          ) : null}
+  function renderSavedNews() {
+    return (
+      <>
+        <SavedNewsHeader></SavedNewsHeader>
+        <SavedNews
+          updateStyles={updateStyles}
+          loggedIn={loggedIn}
+          authButtonClick={handleAuthClick}
+          handleSaveClick={handleSaveClick}
+          handleDeleteClick={handleDeleteClick}
+        ></SavedNews>
+      </>
+    );
+  }
+  function renderApp() {
+    return (
+      <div className="app">
+        <Header
+          loggedIn={loggedIn}
+          authButtonClick={handleAuthClick}
+          isPopupOpened={isPopupOpened}
+        />
+        <Switch>
+          <Route exact path="/">
+            {isPopupOpened ? (
+              <PopupWithForm
+                handleClosePopup={handleClosePopup}
+                handleLogin={handleLogin}
+                handleRegister={handleRegister}
+              ></PopupWithForm>
+            ) : null}
 
-          <Main onFindClick={onFindClick}></Main>
-          {cardsArray && cardsArray.length !== 0 ? (
-            preloader ? (
+            <Main onFindClick={onFindClick}></Main>
+            {cardsArray && cardsArray.length !== 0 ? (
+              preloader ? (
+                <Preloader></Preloader>
+              ) : (
+                <NewsCardList
+                  updateStyles={updateStyles}
+                  cardsArray={cardsArray}
+                  loggedIn={loggedIn}
+                  authButtonClick={handleAuthClick}
+                  handleSaveClick={handleSaveClick}
+                  handleDeleteClick={handleDeleteClick}
+                ></NewsCardList>
+              )
+            ) : preloader ? (
               <Preloader></Preloader>
-            ) : (
-              <NewsCardList
-                cardsArray={cardsArray}
-                loggedIn={loggedIn}
-                authButtonClick={handleAuthClick}
-                handleSaveClick={handleSaveClick}
-                handleDeleteClick={handleDeleteClick}
-              ></NewsCardList>
-            )
-          ) : preloader ? (
-            <Preloader></Preloader>
-          ) : searchError.state ? (
-            <SearchError content={searchError.content}></SearchError>
-          ) : cardsArray && cardsArray.length === 0 ? (
-            <NoResult></NoResult>
-          ) : null}
+            ) : searchError.state ? (
+              <SearchError content={searchError.content}></SearchError>
+            ) : cardsArray && cardsArray.length === 0 ? (
+              <NoResult></NoResult>
+            ) : null}
 
-          <About></About>
-        </Route>
-        <Route exact path="/saved-news">
-          <SavedNewsHeader name={currentUser.name}></SavedNewsHeader>
-          <SavedNews
-            cardsArray={testSavedCardsArray}
+            <About></About>
+          </Route>
+          <ProtectedRoute
+            exact
+            path="/saved-news"
+            component={renderSavedNews}
             loggedIn={loggedIn}
-            authButtonClick={handleAuthClick}
-            handleSaveClick={handleSaveClick}
-            handleDeleteClick={handleDeleteClick}
-          ></SavedNews>
-        </Route>
-        <Route>
-          <Redirect to="/" />
-        </Route>
-      </Switch>
-      <Footer></Footer>
-    </div>
+            setIsPopupOpened={setIsPopupOpened}
+          ></ProtectedRoute>
+          <Route>
+            <Redirect to="/" />
+          </Route>
+        </Switch>
+        <Footer></Footer>
+      </div>
+    );
+  }
+  return (
+    <CurrentUserContext.Provider value={currentUser}>
+      {readyToRender ? renderApp() : null}{" "}
+    </CurrentUserContext.Provider>
   );
 }
 

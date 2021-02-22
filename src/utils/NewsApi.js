@@ -1,7 +1,5 @@
 const WeekInMs = 7 * 24 * 60 * 60 * 1000;
 
-
-
 const _getCurrentDateString = () => {
   return new Date().toISOString();
 };
@@ -15,9 +13,9 @@ bd72da6114734e03ad11be08347878f6
 0992a0189e744342bf057f7e1714b37c
 */
 const NewsApiConfig = {
-  baseUrl: "https://newsapi.org/v2/everything?language=ru&pageSize=10",
+  baseUrl: "https://newsapi.org/v2/everything?language=ru&pageSize=100",
   headers: {
-    Authorization: "Bearer bd72da6114734e03ad11be08347878f6",
+    Authorization: "Bearer 0992a0189e744342bf057f7e1714b37c",
   },
 };
 
@@ -27,16 +25,26 @@ class NewsApiClass {
     this._headers = config.headers;
   }
   _formateDate(date) {
-    console.log(date)
-      const year = date.slice(0, 4)
-      const day = date.slice(8, 10).replace(/^0+/, '')
-      const mounthIndex = date.slice(5, 7)-1
-      const mounthNames = ['января','февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-      console.log(`${day} ${mounthNames[mounthIndex]} ${year}`)
-      return (`${day} ${mounthNames[mounthIndex]} ${year}`)
+    const year = date.slice(0, 4);
+    const day = date.slice(8, 10).replace(/^0+/, "");
+    const mounthIndex = date.slice(5, 7) - 1;
+    const mounthNames = [
+      "января",
+      "февраля",
+      "марта",
+      "апреля",
+      "мая",
+      "июня",
+      "июля",
+      "августа",
+      "сентября",
+      "октября",
+      "ноября",
+      "декабря",
+    ];
+    return `${day} ${mounthNames[mounthIndex]} ${year}`;
   }
   _checkResponse(res) {
-    console.log(res)
     if (res.ok) {
       return res.json();
     } else {
@@ -55,10 +63,17 @@ class NewsApiClass {
     )
       .then((res) => this._checkResponse(res))
       .then((res) => {
-        res.articles.forEach((card) => {
-          card.publishedAt = this._formateDate(card.publishedAt);
-          card.keyWord = query;
-        })
+        res.articles.map((card) => {
+          const formatDate = this._formateDate(card.publishedAt);
+          card.keyword = query;
+          card.title = card.title;
+          card.date = formatDate;
+          card.text = card.description;
+          card.source = card.source.name;
+          card.link = card.url;
+          card.image = card.urlToImage;
+          return;
+        });
         return res;
       });
   }
