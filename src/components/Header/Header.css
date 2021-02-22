@@ -64,6 +64,7 @@
   .header {
     min-height: 66px;
     font-size: 16px;
+    z-index: 2;
   }
   .header__title {
     margin: 0 0 0 40px;

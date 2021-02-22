@@ -1,26 +1,28 @@
+import React from "react";
 import "./SavedNews.css";
 import NewsCards from "../NewsCards/NewsCards.jsx";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function SavedNews({
-  cardsArray,
   loggedIn,
   authButtonClick,
   handleSaveClick,
   handleDeleteClick,
+  updateStyles,
 }) {
-function test(){
-  let t = cardsArray.map((card) => {
-    if (card.saved) {
+  const userContext = React.useContext(CurrentUserContext);
+  function getSaved() {
+    let savedCards = userContext.savedCardsArray.map((card) => {
+      card.saved = true;
       return card;
-    }
-    return '';
-  })
-  return t;
-}
+    });
+    return savedCards;
+  }
   return (
     <main className="saved-news">
       <NewsCards
-        cardsToShow={test()}
+        updateStyles={updateStyles}
+        cardsToShow={getSaved()}
         loggedIn={loggedIn}
         authButtonClick={authButtonClick}
         handleSaveClick={handleSaveClick}

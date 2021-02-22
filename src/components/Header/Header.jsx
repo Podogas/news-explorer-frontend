@@ -1,17 +1,19 @@
 import "./Header.css";
 import Navigation from "../Navigation/Navigation.jsx";
 import React, { useState } from "react";
+
 import { useLocation } from "react-router-dom";
 
-function Header({ loggedIn, authButtonClick, name, isPopupOpened }) {
+function Header({ loggedIn, authButtonClick, isPopupOpened }) {
   const currentPath = useLocation().pathname;
   const [mobileMenu, setMobileMenu] = useState(false);
   function toggleMobileMenu() {
     setMobileMenu(!mobileMenu);
   }
+
   return (
     <>
-     <header
+      <header
         className={
           currentPath === "/"
             ? mobileMenu
@@ -38,11 +40,10 @@ function Header({ loggedIn, authButtonClick, name, isPopupOpened }) {
           }
           onClick={toggleMobileMenu}
         />
-        
+
         <Navigation
           loggedIn={loggedIn}
           authButtonClick={authButtonClick}
-          name={name}
           mobileMenu={mobileMenu}
           toggleMobileMenu={toggleMobileMenu}
         ></Navigation>

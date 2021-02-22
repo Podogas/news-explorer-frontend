@@ -6,6 +6,7 @@ function AuthForm({ onSubmit }) {
   const [validity, setValidity] = React.useState(false);
   const [errorMessageEmail, setErrorMessageEmail] = React.useState("");
   const [errorMessagePass, setErrorMessagePass] = React.useState("");
+  const [errorMessageBtn, setErrorMessageBtn] = React.useState("");
 
   function handleValidation() {
     if (!emailRef.current.validity.valid) {
@@ -26,20 +27,17 @@ function AuthForm({ onSubmit }) {
       setValidity(true);
     }
   }
+  function onError(err) {
+    setErrorMessageBtn(`${err.message}`);
+  }
   function submit(e) {
     e.preventDefault();
     if (validity) {
-      onSubmit(emailRef.current.value, passRef.current.value);
+      onSubmit(emailRef.current.value, passRef.current.value, onError);
     }
   }
   return (
-    <form
-      noValidate
-      className="auth-form"
-      method="post"
-      
-      onSubmit={submit}
-    >
+    <form noValidate className="auth-form" method="post" onSubmit={submit}>
       <span className="auth-form__input-caption">Email</span>
       <input
         ref={emailRef}
@@ -65,6 +63,7 @@ function AuthForm({ onSubmit }) {
         minLength="8"
       />
       <span className="auth-form__input-error-message">{errorMessagePass}</span>
+      <span className="auth-form__btn-error-message">{errorMessageBtn}</span>
       <button
         onClick={submit}
         className={
