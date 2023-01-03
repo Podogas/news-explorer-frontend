@@ -40,6 +40,17 @@
   line-height: 1.2;
   color: #ff0000;
 }
+.reg-form__btn-error-message {
+  text-align: center;
+  min-height: 12px;
+  display: block;
+  margin-bottom: 8px;
+  font-family: Inter , sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #ff0000;
+}
 .reg-form__submit-btn {
   padding: 0;
   border: none;
@@ -47,7 +58,7 @@
   background-color: #2f71e5;
   display: block;
   width: 100%;
-  margin-top: 28px;
+  margin-top: 0;
   line-height: 64px;
   font-family: "Roboto", sans-serif;
   font-size: 18px;

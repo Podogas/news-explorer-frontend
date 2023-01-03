@@ -8,25 +8,39 @@ function NewsCardList({
   handleSaveClick,
   handleDeleteClick,
   cardsArray,
+  updateStyles,
 }) {
-  const [cardsQuantityToShow, setCardsQuantityToShow] = useState(3);
-  const [cardsToShow, setCardsToShow] = useState(cardsArray.slice(0, 3));
+  const CardsPerClick = 3;
+  const [cardsQuantityToShow, setCardsQuantityToShow] = useState(CardsPerClick);
+  const [cardsToShow, setCardsToShow] = useState(
+    cardsArray.slice(0, CardsPerClick)
+  );
+  const [buttonClassName, setButtonClassName] = useState(isButtonBlocked);
 
   function handleCardsQuantity() {
-    setCardsQuantityToShow(cardsQuantityToShow + 3);
-    setCardsToShow(cardsArray.slice(0, (cardsQuantityToShow +3)));
+    setCardsQuantityToShow(cardsQuantityToShow + CardsPerClick);
+    setCardsToShow(cardsArray.slice(0, cardsQuantityToShow + CardsPerClick));
+    setButtonClassName(isButtonBlocked);
+  }
+  function isButtonBlocked() {
+    if (cardsArray.length <= cardsQuantityToShow + CardsPerClick) {
+      return "news-card-list__button news-card-list__button_blocked";
+    } else {
+      return "news-card-list__button";
+    }
   }
   return (
     <section className="news-card-list">
       <h2 className="news-card-list__title">Результаты поиска</h2>
       <NewsCards
+        updateStyles={updateStyles}
         cardsToShow={cardsToShow}
         loggedIn={loggedIn}
         authButtonClick={authButtonClick}
         handleSaveClick={handleSaveClick}
         handleDeleteClick={handleDeleteClick}
       ></NewsCards>
-      <button className="news-card-list__button" onClick={handleCardsQuantity}>
+      <button className={buttonClassName} onClick={handleCardsQuantity}>
         Показать еще
       </button>
     </section>

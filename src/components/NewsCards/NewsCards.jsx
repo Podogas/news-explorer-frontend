@@ -7,11 +7,13 @@ function NewsCards({
   handleSaveClick,
   handleDeleteClick,
   cardsToShow,
+  updateStyles,
 }) {
-  const listItems = cardsToShow.map((card, id) => {
+  let listItems = cardsToShow.map((card, id) => {
     if (card) {
       return (
         <NewsCard
+          updateStyles={updateStyles}
           key={id}
           card={card}
           loggedIn={loggedIn}

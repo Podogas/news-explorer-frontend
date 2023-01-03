@@ -1,7 +1,14 @@
 import "./NewsCard.css";
 import { useLocation } from "react-router-dom";
 
-function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
+function NewsCard({
+  card,
+  loggedIn,
+  authClick,
+  saveClick,
+  deleteClick,
+  updateStyles,
+}) {
   const currentPath = useLocation().pathname;
 
   function calcLines() {
@@ -18,7 +25,7 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
     } else if (card.title.length <= 75) {
       return {
         title: "news-card__line-clamp_3 text-content__title",
-        text: "text-content__text news-card__line-clamp_4",
+        text: "text-content__text news-card__line-clamp_3",
       };
     } else if (card.title.length <= 100) {
       return {
@@ -37,14 +44,15 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
       };
     }
   }
+  function handleSaveClick() {
+    saveClick(card);
+  }
+  function handleDeleteClick() {
+    deleteClick(card);
+  }
   return (
-
-    <li className="news-card">
-      <img
-        src={card.imageSrc}
-        alt={card.imageAlt}
-        className="news-card__image"
-      ></img>
+    <li className={`news-card ${updateStyles}`}>
+      <img src={card.image} alt={card.title} className="news-card__image"></img>
       {currentPath === "/" ? null : (
         <span className="news-card__keyword">{card.keyword}</span>
       )}
@@ -58,7 +66,13 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
               : "news-card__btn_bookmark"
             : "news-card__btn_delete"
         }
-        onClick={loggedIn ? (card.saved ? deleteClick : saveClick) : authClick}
+        onClick={
+          loggedIn
+            ? card.saved
+              ? handleDeleteClick
+              : handleSaveClick
+            : authClick
+        }
       ></button>
       <span className="news-card__btn-tooltip">
         {currentPath === "/"
@@ -72,7 +86,10 @@ function NewsCard({ card, loggedIn, authClick, saveClick, deleteClick }) {
 
       <span className="news-card__date">{card.date}</span>
       <div className="news-card__text-content">
-        <h2 className={calcLines().title}>{card.title}</h2>
+        <a className="news-card__link" href={card.url}>
+          <h2 className={calcLines().title}>{card.title}</h2>
+        </a>
+
         <p className={calcLines().text}>{card.text}</p>
       </div>
       <span className="news-card__caption">{card.source}</span>

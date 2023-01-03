@@ -32,6 +32,9 @@
   opacity: .9;
   }
 
+.news-card-list__button_blocked {
+  display: none;
+ } 
 
 
 /*tablet s*/

@@ -11,8 +11,8 @@ function PopupWithForm({ handleClosePopup, handleLogin, handleRegister }) {
       formComponent: RegForm,
       or: true,
       linkText: "Войти",
-      onSubmit: (email, password, name) => {
-        handleRegister(email, password, name, onSucsess);
+      onSubmit: (email, password, name, onError) => {
+        handleRegister(email, password, name, onSucsess, onError);
       },
     },
     auth: {
@@ -48,7 +48,6 @@ function PopupWithForm({ handleClosePopup, handleLogin, handleRegister }) {
 
   function onSucsess() {
     setPopupSetup(popups.sucsess);
-    console.log("sucsess");
   }
   const notOverlayEl = useRef(null);
 
